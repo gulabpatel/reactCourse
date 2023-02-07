@@ -4,7 +4,7 @@ mongoose.set('strictQuery', false);
 const connectToMongo = ()=>{
     mongoose.connect(mongoURI, (err)=>{
         if(err) console.log(err)
-        else console.log("Connected to Mongo SUccessfully")
+        else console.log("Connected to Mongo Successfully")
     })
 }
 
