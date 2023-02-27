@@ -10,20 +10,32 @@ import NoteState from './context/notes/NoteState';
 import Alert from './components/Alert';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import { useState } from 'react';
 function App() {
+  const [alert, setAlert] = useState(null);
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type
+    })
+    setTimeout(() => {
+      setAlert(null)
+    }, 1500);
+  }
+
   return (
     <>
       <NoteState>
         <Router>
-          <Navbar message="Confirm"/>
-          <Alert messege="This is amazing react course"/>
+          <Navbar message="Confirm" />
+          <Alert alert={alert}/>
           <div className="container">
-          <Switch>
-            <Route exact path="/home"><Home /></Route>
-            <Route exact path="/about"><About /></Route>
-            <Route exact path="/login"><Login /></Route>
-            <Route exact path="/signup"><Signup /></Route>
-          </Switch>
+            <Switch>
+              <Route exact path="/home"><Home showAlert={showAlert}/></Route>
+              <Route exact path="/about"><About /></Route>
+              <Route exact path="/login"><Login showAlert={showAlert}/></Route>
+              <Route exact path="/signup"><Signup showAlert={showAlert}/></Route>
+            </Switch>
           </div>
         </Router>
       </NoteState>

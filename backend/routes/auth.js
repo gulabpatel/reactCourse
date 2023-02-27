@@ -15,6 +15,7 @@ router.post('/createuser', [
     body('email', 'Enter a valid Email').isEmail(),
     body('password', 'Password must be at least five characters').isLength({ min: 5 }),
 ], async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     //If there are errors, return Bad request and errors
     if (!errors.isEmpty()) {
@@ -23,7 +24,7 @@ router.post('/createuser', [
     try {
         let user = await User.findOne({ email: req.body.email });
         if (user) {
-            return res.status(400).json({ errors: "sorry a user with this email already exists" })
+            return res.status(400).json({ success, errors: "sorry a user with this email already exists" })
         }
         const salt = await bcrypt.genSalt(10);
         const secPass = await bcrypt.hash(req.body.password, salt);
@@ -40,9 +41,9 @@ router.post('/createuser', [
             }
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
-        console.log(authtoken)
         //  res.json({user})
-        res.json({ authtoken: authtoken })
+        success = true;
+        res.json({ success, authtoken: authtoken })
     }
     catch (error) {
         console.log(error.message);
